@@ -1,5 +1,5 @@
 from classes import Record, AddressBook
-from typing import Callable
+from typing import Callable, Dict, List
 
 
 # Function for handling errors during processing input commands (decorator)
@@ -96,7 +96,7 @@ def show_birthday(args: list, book: AddressBook) -> str:
 
 @input_error
 # show upcoming birthdays for next 7 days
-def birthdays(book: AddressBook) -> str | list:
+def birthdays(book: AddressBook) -> str | list | List[Dict[str, str]]:
     birthdays = book.get_upcoming_birthdays()
     if not birthdays:
         return "There is no upcoming birthdays"
