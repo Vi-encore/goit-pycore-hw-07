@@ -25,22 +25,9 @@ class Phone(Field):
 class Birthday(Field):
     def __init__(self, value):
         try:
-            # pattern = r"\b(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.(\d{4})\b"
-            # if re.match(pattern, value):
-            self.value = (
-                datetime.strptime(value, "%d.%m.%Y").date()
-                # .date().strftime("%d.%m.%Y")
-            )
-        # else:
-        #     raise ValueError(
-        #         "Day: 01-31, Month: 01-12, Year: ****"
-        # )  # should be different type of error
-        # super().__init__(value)
+            self.value = datetime.strptime(value, "%d.%m.%Y").date()
         except ValueError:
             raise ValueError("Invalid date format. Use DD.MM.YYYY")
-
-    # def __str__(self):
-    #   return f"{self.value.strftime(DATE_FORMAT)}"
 
 
 class Record:
@@ -50,7 +37,7 @@ class Record:
         self.birthday = None
 
     def __str__(self) -> str:
-        return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}, birthday: {self.birthday}"  # if bth
+        return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}."
 
     def add_phone(self, phone: str) -> None:
         new_phone = Phone(phone)
@@ -63,6 +50,8 @@ class Record:
             for phone in self.phones:
                 if phone.value == old_number:
                     phone.value = new_number
+                else:
+                    raise ValueError
 
     def remove_phone(self, phone_to_remove: str) -> None:
         self.phones = [phone for phone in self.phones if phone.value != phone_to_remove]
@@ -114,47 +103,48 @@ class AddressBook(UserDict):
                     if birthday_this_year.weekday() in {5, 6}:
                         congrats_day += timedelta(days=(7 - congrats_day.weekday()))
 
-                upcoming_birthdays.append(
-                    {
-                        "name": name,
-                        "congratulation_date": congrats_day.strftime("%d.%m.%Y"),
-                    }
-                )
+                    upcoming_birthdays.append(
+                        {
+                            "name": name,
+                            "birthday": birthday_date.strftime("%d.%m.%Y"),
+                            "congratulation_date": congrats_day.strftime("%d.%m.%Y"),
+                        }
+                    )
         return upcoming_birthdays
 
 
 # # Створення нової адресної книги
-book = AddressBook()
+# book = AddressBook()
 
-# # Створення запису для John
-john_record = Record("John")
-john_record.add_phone("1234567890")
-john_record.add_phone("5555555555")
-john_record.add_birthday("31.03.1956")
+# # # Створення запису для John
+# john_record = Record("John")
+# john_record.add_phone("1234567890")
+# john_record.add_phone("5555555555")
+# john_record.add_birthday("31.03.1956")
 
-# # Додавання запису John до адресної книги
-book.add_record(john_record)
-
-
-# # Створення та додавання нового запису для Jane
-jane_record = Record("Jane")
-jane_record.add_phone("9876543210")
-jane_record.add_birthday("03.04.1956")
-book.add_record(jane_record)
+# # # Додавання запису John до адресної книги
+# book.add_record(john_record)
 
 
-book.get_upcoming_birthdays()
-# # Виведення всіх записів у книзі
-# for name, record in book.data.items():
-#     print(record)
-
-# # Знаходження та редагування телефону для John
-john = book.find("John")
-jane = book.find("Jane")
+# # # Створення та додавання нового запису для Jane
+# jane_record = Record("Jane")
+# jane_record.add_phone("9876543210")
+# jane_record.add_birthday("03.04.1956")
+# book.add_record(jane_record)
 
 
-# print(jane)
-print("Список привітань на цьому тижні:", book.get_upcoming_birthdays())
+# book.get_upcoming_birthdays()
+# # # Виведення всіх записів у книзі
+# # for name, record in book.data.items():
+# #     print(record)
+
+# # # Знаходження та редагування телефону для John
+# john = book.find("John")
+# jane = book.find("Jane")
+
+
+# # print(jane)
+# print("Список привітань на цьому тижні:", book.get_upcoming_birthdays())
 # # john.edit_phone("1234567890", "1112223333")
 
 # print(jane)  # Виведення: Contact name: John, phones: 1112223333; 5555555555
