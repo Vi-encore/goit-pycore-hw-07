@@ -17,6 +17,7 @@ def input_error(func: Callable) -> Callable:
     return inner
 
 
+@input_error  # handle if no command was typed
 # Function for handling input commands from a terminal
 def parse_input(user_input: str) -> tuple:
     cmd, *args = user_input.split()
@@ -93,10 +94,11 @@ def show_birthday(args: list, book: AddressBook) -> str:
     return record.birthday.value.strftime("%d.%m.%Y")
 
 
+@input_error
 # show upcoming birthdays for next 7 days
 def birthdays(book: AddressBook) -> str | list:
     birthdays = book.get_upcoming_birthdays()
-    if birthdays == []:
+    if not birthdays:
         return "There is no upcoming birthdays"
     return birthdays
 

@@ -63,6 +63,9 @@ class Record:
         return None
 
     def add_birthday(self, birthday):
+        birthday = Birthday(birthday)
+        if birthday.value == self.birthday:
+            raise ValueError(f"Birthday has been added earlier.")
         self.birthday = Birthday(birthday)
 
 
