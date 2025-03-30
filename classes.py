@@ -67,7 +67,7 @@ class Record:
         birthday = Birthday(birthday)
         if birthday.value == self.birthday:
             raise ValueError(f"Birthday has been added earlier.")
-        self.birthday = Birthday(birthday)
+        self.birthday = birthday
 
 
 class AddressBook(UserDict):
